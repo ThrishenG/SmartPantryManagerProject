@@ -2,8 +2,12 @@ package com.ThrishenGovender.smartpantry.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
@@ -37,6 +41,27 @@ public class MainActivity extends AppCompatActivity {
         adapter = new IngredientAdapter();
         recyclerView.setAdapter(adapter);
 
+        // Swipe-to-Delete functionality
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getBindingAdapterPosition();
+                Ingredient ingredientToDelete = adapter.getIngredientAt(position);
+
+                databaseWriteExecutor.execute(() -> {
+                    database.ingredientDao().delete(ingredientToDelete);
+                    loadIngredients();
+                });
+
+                Toast.makeText(MainActivity.this, "Ingredient deleted", Toast.LENGTH_SHORT).show();
+            }
+        }).attachToRecyclerView(recyclerView);
+
         database = Room.databaseBuilder(getApplicationContext(),
                         AppDatabase.class, "smart_pantry_db")
                 .fallbackToDestructiveMigration()
@@ -45,6 +70,19 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fabAdd = findViewById(R.id.fabAddIngredient);
         fabAdd.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, AddIngredientActivity.class);
+            startActivity(intent);
+        });
+
+        Button btnFindRecipes = findViewById(R.id.btnFindRecipes);
+        btnFindRecipes.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SuggestedRecipesActivity.class);
+            startActivity(intent);
+        });
+
+        // NEW: Button to navigate to Settings screen
+        Button btnSettings = findViewById(R.id.btnSettings);
+        btnSettings.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
         });
 
@@ -61,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
     private void loadIngredients() {
         databaseWriteExecutor.execute(() -> {
             List<Ingredient> ingredients = database.ingredientDao().getAllIngredients();
-            // Yellow warning fixed here:
             runOnUiThread(() -> adapter.setIngredients(ingredients));
         });
     }
@@ -98,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
                 initialRecipes.add(createRecipe("Guacamole", "Mash avocado with diced tomato and onion.", "avocado", "tomato", "onion"));
 
                 database.recipeDao().insertAll(initialRecipes);
-                System.out.println("Database successfully seeded with " + initialRecipes.size() + " recipes.");
             }
         });
     }

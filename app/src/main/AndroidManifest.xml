@@ -20,7 +20,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.SuggestedRecipesActivity" />
         <activity android:name=".activities.AddIngredientActivity" />
+        <activity android:name=".activities.RecipeDetailActivity" />
+        <activity android:name=".activities.SettingsActivity" />
     </application>
 
 </manifest>

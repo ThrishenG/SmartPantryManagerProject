@@ -6,7 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 import java.util.List;
-import com.yourname.smartpantry.models.Ingredient;
+import com.ThrishenGovender.smartpantry.models.Ingredient;
 
 @Dao
 public interface IngredientDao {

@@ -23,6 +23,10 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
         return new IngredientViewHolder(itemView);
     }
 
+    public Ingredient getIngredientAt(int position) {
+        return ingredients.get(position);
+    }
+
     @Override
     public void onBindViewHolder(@NonNull IngredientViewHolder holder, int position) {
         Ingredient currentIngredient = ingredients.get(position);
