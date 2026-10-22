@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Earth Palette -->
+    <color name="colorPrimary">#1B2E24</color> <!-- Dark charcoal green -->
+    <color name="colorAccent">#E1DBCB</color> <!-- Pastel tan -->
+    <color name="screenBackground">#F4F2EB</color> <!-- Muted warm beige -->
+    <color name="cardBackground">#FBF9F4</color> <!-- Soft Off-white -->
+
+    <!-- Text & Borders -->
+    <color name="textPrimary">#1A1C19</color>
+    <color name="textSecondary">#6E726B</color>
+    <color name="borderLight">#E0DEC2</color>
+
+    <!-- Category Badge Pastels -->
+    <color name="badgeFresh">#D2E5CE</color>
+    <color name="badgeDairy">#EFE6D9</color>
+    <color name="badgeGrains">#EFDFBE</color>
+    <color name="badgeCans">#E6E2CE</color>
+
+    <!--Alerts for low items-->
+    <color name="alertRed">#D32F2F</color>
+    <color name="alertBackground">#FFEBEE</color>
 </resources>

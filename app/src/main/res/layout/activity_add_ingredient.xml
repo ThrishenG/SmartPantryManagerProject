@@ -1,46 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="24dp">
+    android:padding="24dp"
+    android:background="@color/screenBackground">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add New Ingredient"
+        android:text="Ingredient Details"
         android:textSize="24sp"
         android:textStyle="bold"
+        android:textColor="@color/textPrimary"
         android:layout_marginBottom="24dp"/>
 
     <EditText
         android:id="@+id/editIngredientName"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Ingredient Name (e.g., Tomato)"
-        android:inputType="textCapWords"
-        android:layout_marginBottom="16dp"/>
+        android:layout_height="56dp"
+        android:hint="Ingredient Name (e.g. Bread)"
+        android:background="@android:color/white"
+        android:paddingHorizontal="16dp"
+        android:layout_marginBottom="16dp"
+        android:elevation="2dp"/>
 
     <EditText
         android:id="@+id/editIngredientQuantity"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Quantity (e.g., 2)"
+        android:layout_height="56dp"
+        android:hint="Quantity (e.g. 1)"
         android:inputType="number"
-        android:layout_marginBottom="16dp"/>
+        android:background="@android:color/white"
+        android:paddingHorizontal="16dp"
+        android:layout_marginBottom="16dp"
+        android:elevation="2dp"/>
 
     <EditText
         android:id="@+id/editIngredientUnit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Unit (e.g., items, kg, ml)"
-        android:inputType="text"
-        android:layout_marginBottom="24dp"/>
+        android:layout_height="56dp"
+        android:hint="Unit (e.g. loaf, kg, cans)"
+        android:background="@android:color/white"
+        android:paddingHorizontal="16dp"
+        android:layout_marginBottom="16dp"
+        android:elevation="2dp"/>
 
-    <Button
+    <!-- This is the missing field that caused your error -->
+    <EditText
+        android:id="@+id/editCategory"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:hint="Category (Fresh, Dairy, Grains, Cans)"
+        android:background="@android:color/white"
+        android:paddingHorizontal="16dp"
+        android:layout_marginBottom="32dp"
+        android:elevation="2dp"/>
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSaveIngredient"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Save Ingredient" />
+        android:layout_height="56dp"
+        android:text="Save Ingredient"
+        android:textSize="16sp"
+        app:cornerRadius="24dp"
+        android:backgroundTint="@color/colorPrimary" />
 
 </LinearLayout>

@@ -5,12 +5,13 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
-import java.util.List;
+
 import com.ThrishenGovender.smartpantry.models.Ingredient;
+
+import java.util.List;
 
 @Dao
 public interface IngredientDao {
-
     @Insert
     void insert(Ingredient ingredient);
 
@@ -20,10 +21,11 @@ public interface IngredientDao {
     @Delete
     void delete(Ingredient ingredient);
 
-    // Reads all ingredients to display in the list
-    @Query("SELECT * FROM pantry_ingredients")
+    // Updated table name to 'ingredients' to match your model
+    @Query("SELECT * FROM ingredients")
     List<Ingredient> getAllIngredients();
 
-    @Query("SELECT name FROM pantry_ingredients")
+    // Updated table name to 'ingredients' to match your model
+    @Query("SELECT name FROM ingredients")
     List<String> getAllIngredientNames();
 }
