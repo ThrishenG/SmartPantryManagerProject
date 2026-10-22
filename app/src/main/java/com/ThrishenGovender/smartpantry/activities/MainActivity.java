@@ -1,33 +1,71 @@
 package com.ThrishenGovender.smartpantry.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
+
+import com.ThrishenGovender.smartpantry.R;
+import com.ThrishenGovender.smartpantry.adapters.IngredientAdapter;
+import com.ThrishenGovender.smartpantry.database.AppDatabase;
+import com.ThrishenGovender.smartpantry.models.Ingredient;
+import com.ThrishenGovender.smartpantry.models.Recipe;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.yourname.smartpantry.R;
-import com.yourname.smartpantry.database.AppDatabase;
-
 public class MainActivity extends AppCompatActivity {
 
-    // 1. Create a public static database instance and a thread pool
     public static AppDatabase database;
     public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(4);
+    private IngredientAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        RecyclerView recyclerView = findViewById(R.id.recyclerViewIngredients);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new IngredientAdapter();
+        recyclerView.setAdapter(adapter);
+
         database = Room.databaseBuilder(getApplicationContext(),
                         AppDatabase.class, "smart_pantry_db")
                 .fallbackToDestructiveMigration()
                 .build();
 
-        // Run the seeder on startup
+        FloatingActionButton fabAdd = findViewById(R.id.fabAddIngredient);
+        fabAdd.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AddIngredientActivity.class);
+            startActivity(intent);
+        });
+
         seedDatabaseIfEmpty();
+        loadIngredients();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadIngredients();
+    }
+
+    private void loadIngredients() {
+        databaseWriteExecutor.execute(() -> {
+            List<Ingredient> ingredients = database.ingredientDao().getAllIngredients();
+            // Yellow warning fixed here:
+            runOnUiThread(() -> adapter.setIngredients(ingredients));
+        });
+    }
+
     private Recipe createRecipe(String name, String instructions, String... ingredients) {
         Recipe recipe = new Recipe();
         recipe.name = name;
@@ -35,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         recipe.requiredIngredients = Arrays.asList(ingredients);
         return recipe;
     }
+
     private void seedDatabaseIfEmpty() {
         databaseWriteExecutor.execute(() -> {
             List<Recipe> existingRecipes = database.recipeDao().getAllRecipes();
@@ -60,8 +99,6 @@ public class MainActivity extends AppCompatActivity {
 
                 database.recipeDao().insertAll(initialRecipes);
                 System.out.println("Database successfully seeded with " + initialRecipes.size() + " recipes.");
-            } else {
-                System.out.println("Database already contains recipes. Skipping seed.");
             }
         });
     }
